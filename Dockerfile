@@ -1,7 +1,7 @@
-# VoiceVox Engine Dockerfile - 修正版
+# VoiceVox Engine Dockerfile - 最終修正版
 FROM python:3.9-slim
 
-# 必要なパッケージをインストール (curlを追加)
+# 必要なパッケージをインストール
 RUN apt-get update && apt-get install -y \
     curl \
     unzip \
@@ -10,9 +10,11 @@ RUN apt-get update && apt-get install -y \
 # 作業ディレクトリを設定
 WORKDIR /app
 
-# VoiceVoxエンジンをダウンロードして展開 (CPU版 - directml)
-# -L オプションでリダイレクトに追従
-RUN curl -L "https://github.com/VOICEVOX/voicevox_engine/releases/latest/download/voicevox_engine-linux-directml.zip" -o voicevox.zip \
+# VoiceVoxエンジンをダウンロードして展開 (安定版)
+# --retry: ネットワークエラー時に3回リトライ
+# fileコマンドでzipファイルか確認してからunzip
+RUN curl -L --retry 3 "https://github.com/VOICEVOX/voicevox_engine/releases/latest/download/voicevox_engine-linux-directml.zip" -o voicevox.zip \
+    && file voicevox.zip | grep -q 'Zip archive data' \
     && unzip voicevox.zip \
     && rm voicevox.zip
 
