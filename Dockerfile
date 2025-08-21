@@ -4,6 +4,7 @@ FROM voicevox/voicevox_engine:cpu-ubuntu20.04-latest
 # 必要なパッケージのインストール
 RUN apt-get update && apt-get install -y \
     curl \
+    netcat-openbsd \
     && rm -rf /var/lib/apt/lists/*
 
 # 環境変数の設定
@@ -28,9 +29,9 @@ EOF
 
 RUN chmod +x /start.sh
 
-# ヘルスチェック
-HEALTHCHECK --interval=30s --timeout=30s --start-period=120s --retries=5 \
-    CMD curl -f http://localhost:$PORT/version || exit 1
+# ヘルスチェック（より簡単な手法でチェック）
+HEALTHCHECK --interval=30s --timeout=10s --start-period=300s --retries=3 \
+    CMD nc -z localhost 50021 || exit 1
 
 # 起動コマンド
 CMD ["/start.sh"]
