@@ -1,10 +1,11 @@
-# VoiceVox Engine Dockerfile - 最終修正版
+# VoiceVox Engine Dockerfile - 本当の最終修正版
 FROM python:3.9-slim
 
-# 必要なパッケージをインストール
+# 必要なパッケージをインストール (fileを追加)
 RUN apt-get update && apt-get install -y \
     curl \
     unzip \
+    file \
     && rm -rf /var/lib/apt/lists/*
 
 # 作業ディレクトリを設定
