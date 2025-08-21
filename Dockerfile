@@ -14,16 +14,19 @@ ENV HOST=0.0.0.0
 EXPOSE $PORT
 
 # Railway用の起動スクリプトを作成
-RUN echo '#!/bin/bash\n\
-echo "Starting VOICEVOX Engine on $HOST:$PORT"\n\
-echo "Checking if port is set: $PORT"\n\
-if [ -z "$PORT" ]; then\n\
-    echo "PORT not set, using default 50021"\n\
-    export PORT=50021\n\
-fi\n\
-echo "Final command: ./run --host $HOST --port $PORT"\n\
-exec ./run --host "$HOST" --port "$PORT"' > /start.sh \
-    && chmod +x /start.sh
+COPY <<EOF /start.sh
+#!/bin/bash
+echo "Starting VOICEVOX Engine on \$HOST:\$PORT"
+echo "Checking if port is set: \$PORT"
+if [ -z "\$PORT" ]; then
+    echo "PORT not set, using default 50021"
+    export PORT=50021
+fi
+echo "Final command: ./run --host \$HOST --port \$PORT"
+exec ./run --host "\$HOST" --port "\$PORT"
+EOF
+
+RUN chmod +x /start.sh
 
 # ヘルスチェック
 HEALTHCHECK --interval=30s --timeout=30s --start-period=120s --retries=5 \
