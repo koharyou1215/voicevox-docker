@@ -1,4 +1,4 @@
-# VoiceVox Engine Dockerfile -【最最終修正版】
+# VoiceVox Engine Dockerfile -【正真正銘の最終修正版】
 FROM python:3.9-slim
 
 # 必要なパッケージをインストール
@@ -10,8 +10,8 @@ RUN apt-get update && apt-get install -y \
 # 作業ディレクトリを設定
 WORKDIR /app
 
-# VoiceVoxエンジンをダウンロードして展開 (CPU版 - directml)
-RUN wget "https://github.com/VOICEVOX/voicevox_engine/releases/download/0.24.1/voicevox_engine-linux-directml.zip" -O voicevox.zip \
+# VoiceVoxエンジンをダウンロードして展開 (正しいCPU版URL)
+RUN wget "https://github.com/VOICEVOX/voicevox_engine/releases/download/0.24.1/voicevox_engine-linux-cpu-0.24.1.zip" -O voicevox.zip \
     && unzip voicevox.zip \
     && rm voicevox.zip
 
